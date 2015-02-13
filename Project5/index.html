@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Restaurant Map</title>
+
+        <!-- build:css output.min.css -->
+        <link rel="stylesheet" href="css/main.css">
+        <!-- endbuild -->
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz_Q2Jo2YYRkhs9pX_yZ2dneekx5xTOM4"></script>
+        <!-- build:js output.min.js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/knockout/dist/knockout.js"></script>
+        <script src="js/app.js"></script>
+        <!-- endbuild -->
+    </head>
+    <body>
+        <div class="map"></div>
+        <select class="locationSelect" data-bind="options: locations, optionsText: 'name', value: currentLocation"></select>
+        <ul class="locations" data-bind="foreach: businesses">
+            <li class="location" data-bind="text: location.name, click: $parent.selectBusiness"></li>
+        </ul>
+        <input class="searchInput" type="text" data-bind="textInput: searchTerm" placeholder="Search">
+    </body>
+</html>

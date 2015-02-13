@@ -1,0 +1,6 @@
+To run this application, open index.html in Chrome.
+
+A minified version, ready for distribution, is available in dist/index.html.
+
+Searches can be performed by typing in the search bar at the top.  Clicking
+a business name or map marker will load the street view.

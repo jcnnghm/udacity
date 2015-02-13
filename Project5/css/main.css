@@ -1,0 +1,47 @@
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+}
+
+.locationSelect {
+    position: absolute;
+    top: 30px;
+    right: 5px;
+}
+
+.location {
+    cursor: pointer;
+    width: 200px;
+    margin: 15px 10px;
+    padding: 0;
+    font: 15px Helvetica, Arial, sans-serif;
+    font-weight: bold;
+}
+
+.locations {
+    background-color: white;
+    list-style-type: none;
+    width: 240px;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 60px;
+    bottom: 20px;
+    right: 5px;
+    overflow: auto;
+    box-shadow: 3px 3px 5px #888888;
+}
+
+.searchInput {
+    position: absolute;
+    margin: 0 30%;
+    top: 20px;
+    width: 40%;
+    box-shadow: 3px 3px 5px #888888;
+}
