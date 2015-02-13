@@ -1,9 +1,10 @@
 /* Models */
-// Represents a location
+// Represents a location with a helper that makes it easier to work with maps
 var Location = function(name, latitude, longitude) {
     this.name = ko.observable(name);
     this.latitude = ko.observable(latitude);
     this.longitude = ko.observable(longitude);
+    // Provides coordinates literal that works well with maps
     this.coordinates = ko.computed(function() {
         return {lat: this.latitude(), lng: this.longitude()};
     }, this);
@@ -39,6 +40,7 @@ var FourSquare = {
             limit: this.limit,
             radius: this.radius
         };
+        // Only include a search term if there is actually text
         if (searchTerm && searchTerm.trim().length > 0) data.query = searchTerm;
         return $.ajax({
             url: 'https://api.foursquare.com/v2/venues/search',
@@ -54,11 +56,13 @@ var ViewModel = function() {
 
     this.googleMap = new google.maps.Map(document.getElementsByClassName('map')[0]);
 
+    // saving the request is necessary so it can be aborted when we make a new
+    // request
     this.fourSquareRequest = null;
 
     // Only update after searchTerm hasn't changed for at least 500ms
     this.searchTerm = ko.observable().extend(
-            {rateLimit: {timeout: 500, method: "notifyWhenChangesStop"}}
+        {rateLimit: {timeout: 500, method: "notifyWhenChangesStop"}}
     );
     this.searchTerm.subscribe(function(newValue) {
         this.search(newValue);
@@ -70,6 +74,7 @@ var ViewModel = function() {
     ]);
 
     this.businesses = ko.observableArray([]);
+    // Markers need to be stored so they can be removed from the map
     this.mapMarkers = [];
 
     this.currentLocation = ko.observable();
@@ -87,6 +92,7 @@ var ViewModel = function() {
         this.search();
     }, this);
 
+    // Performs a search, resetting the businesses in the process
     this.search = function(searchTerm) {
         this.resetBusinesses();
         if (this.fourSquareRequest) this.fourSquareRequest.abort();
@@ -100,6 +106,7 @@ var ViewModel = function() {
         });
     };
 
+    // Reset businesses, removing them from the map and the businesses list
     this.resetBusinesses = function() {
         this.businesses.removeAll();
 
@@ -110,14 +117,17 @@ var ViewModel = function() {
         this.mapMarkers = [];
     };
 
+    // Add business to the map and to the businesses list
     this.addBusiness = function(business) {
         var marker = new google.maps.Marker({
             position: business.location.coordinates(),
             map: this.googleMap,
             title: business.location.name()
         });
+        // call selectBusiness when the marker is clicked
         google.maps.event.addListener(marker, 'click', function() {
             self.selectBusiness(business);
+            // animate for 700ms
             marker.setAnimation(google.maps.Animation.BOUNCE);
             setTimeout(function() { marker.setAnimation(null) }, 700);
         });
@@ -125,6 +135,7 @@ var ViewModel = function() {
         this.businesses.push(business);
     };
 
+    // Load street view when a business is selected
     this.selectBusiness = function(business) {
         console.log("Selected " + business.location.name());
 
@@ -133,7 +144,7 @@ var ViewModel = function() {
         panorama.setVisible(true);
     };
 
-    // Setup Data
+    // Setup Initial Location
     this.currentLocation(this.locations()[0]);
 };
 
