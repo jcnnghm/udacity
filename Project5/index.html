@@ -21,7 +21,7 @@
         <select class="locationSelect" data-bind="options: locations, optionsText: 'name', value: currentLocation"></select>
 
         <ul class="locations infoBox" data-bind="foreach: businesses">
-            <li class="location" data-bind="text: location.name, click: $parent.selectBusiness"></li>
+            <li class="location" data-bind="text: location.name, click: $parent.selectBusiness, css: { highlight: $data === $parent.selectedBusiness() }"></li>
         </ul>
 
         <input class="searchInput" type="text" data-bind="textInput: searchTerm" placeholder="Search">

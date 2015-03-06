@@ -17,9 +17,10 @@ html, body {
 
 .location {
     cursor: pointer;
-    width: 200px;
-    margin: 15px 10px;
-    padding: 0;
+    margin: 0;
+    padding: 8px 10px;
+    background-color: white;
+    transition: background-color 500ms ease-out;
 }
 
 .infoBox {
@@ -67,4 +68,10 @@ html, body {
     font-size: 12px;
     margin: 15px 10px;
     text-decoration: underline;
+    color: #444;
+}
+
+.highlight {
+    background-color: yellow;
+    transition: background-color 2s ease-out;
 }
