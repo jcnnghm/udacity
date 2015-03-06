@@ -20,22 +20,25 @@ html, body {
     width: 200px;
     margin: 15px 10px;
     padding: 0;
+}
+
+.infoBox {
+    position: absolute;
+    width: 240px;
+    padding: 0;
+    margin: 0;
+    background-color: white;
+    overflow: auto;
+    box-shadow: 3px 3px 5px #888888;
     font: 15px Helvetica, Arial, sans-serif;
     font-weight: bold;
 }
 
 .locations {
-    background-color: white;
     list-style-type: none;
-    width: 240px;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 60px;
+    top: 170px;
     bottom: 20px;
     right: 5px;
-    overflow: auto;
-    box-shadow: 3px 3px 5px #888888;
 }
 
 .searchInput {
@@ -44,4 +47,24 @@ html, body {
     top: 20px;
     width: 40%;
     box-shadow: 3px 3px 5px #888888;
+}
+
+.businessInfoBox {
+    position: absolute;
+    top: 60px;
+    right: 5px;
+    height: 95px;
+}
+
+.selectedBusinessName {
+    margin: 15px 10px 0 10px;
+    display: block;
+}
+
+.streetViewLink {
+    display: block;
+    cursor: pointer;
+    font-size: 12px;
+    margin: 15px 10px;
+    text-decoration: underline;
 }

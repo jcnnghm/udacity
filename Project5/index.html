@@ -17,10 +17,18 @@
     </head>
     <body>
         <div class="map"></div>
+
         <select class="locationSelect" data-bind="options: locations, optionsText: 'name', value: currentLocation"></select>
-        <ul class="locations" data-bind="foreach: businesses">
+
+        <ul class="locations infoBox" data-bind="foreach: businesses">
             <li class="location" data-bind="text: location.name, click: $parent.selectBusiness"></li>
         </ul>
+
         <input class="searchInput" type="text" data-bind="textInput: searchTerm" placeholder="Search">
+
+        <div class="businessInfoBox infoBox" data-bind="with: selectedBusiness, visible: selectedBusiness">
+            <span class="selectedBusinessName" data-bind="text: location.name"></span>
+            <a class="streetViewLink" data-bind="click: $parent.displayStreetView">Display Street View</a>
+        </div>
     </body>
 </html>

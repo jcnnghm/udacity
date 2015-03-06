@@ -54,7 +54,18 @@ var FourSquare = {
 var ViewModel = function() {
     var self = this;
 
-    this.googleMap = new google.maps.Map(document.getElementsByClassName('map')[0]);
+    try {
+        this.googleMap = new google.maps.Map(document.getElementsByClassName('map')[0]);
+    } catch(err) {
+        // The map failed to load, so alert the use and clear the body content
+        // to prevent KO binding setup from failing
+        var body = document.getElementsByTagName('body')[0];
+        while (body.hasChildNodes()) {
+            body.removeChild(body.firstChild);
+        }
+        alert('Google Maps failed to load.  Please try reloading the page');
+        return;
+    }
 
     // saving the request is necessary so it can be aborted when we make a new
     // request
@@ -62,7 +73,7 @@ var ViewModel = function() {
 
     // Only update after searchTerm hasn't changed for at least 500ms
     this.searchTerm = ko.observable().extend(
-        {rateLimit: {timeout: 500, method: "notifyWhenChangesStop"}}
+        {rateLimit: {timeout: 500, method: 'notifyWhenChangesStop'}}
     );
     this.searchTerm.subscribe(function(newValue) {
         this.search(newValue);
@@ -74,12 +85,12 @@ var ViewModel = function() {
     ]);
 
     this.businesses = ko.observableArray([]);
-    // Markers need to be stored so they can be removed from the map
-    this.mapMarkers = [];
+
+    this.selectedBusiness = ko.observable();
 
     this.currentLocation = ko.observable();
     this.currentLocation.subscribe(function(newValue) {
-        console.log("Switched to city: " + newValue.name());
+        console.log('Switched to city: ' + newValue.name());
 
         // Set the location on the map
         this.googleMap.setCenter(newValue.coordinates());
@@ -102,19 +113,20 @@ var ViewModel = function() {
                 self.addBusiness(new Business(fourSquareVenue));
             });
         }).fail(function() {
-            alert("FourSquare data load failed.  Please reload the page.");
+            alert('FourSquare data load failed.  Please reload the page.');
         });
     };
 
     // Reset businesses, removing them from the map and the businesses list
     this.resetBusinesses = function() {
+        // clear map markers
+        this.businesses().forEach(function(business) {
+            business.marker.setMap(null);
+        });
+
         this.businesses.removeAll();
 
-        // clear map markers
-        this.mapMarkers.forEach(function(marker) {
-            marker.setMap(null);
-        });
-        this.mapMarkers = [];
+        this.selectedBusiness(null);
     };
 
     // Add business to the map and to the businesses list
@@ -127,22 +139,38 @@ var ViewModel = function() {
         // call selectBusiness when the marker is clicked
         google.maps.event.addListener(marker, 'click', function() {
             self.selectBusiness(business);
-            // animate for 700ms
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function() { marker.setAnimation(null) }, 700);
         });
-        this.mapMarkers.push(marker);
+        business.marker = marker;
         this.businesses.push(business);
     };
 
     // Load street view when a business is selected
     this.selectBusiness = function(business) {
-        console.log("Selected " + business.location.name());
+        console.log('Selected ' + business.location.name());
 
-        var panorama = self.googleMap.getStreetView();
-        panorama.setPosition(business.location.coordinates());
-        panorama.setVisible(true);
+        self.hideStreetView();
+
+        // animate the map marker for 700ms
+        business.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            business.marker.setAnimation(null);
+        }, 700);
+
+        self.selectedBusiness(business);
     };
+
+    this.panorama = self.googleMap.getStreetView();
+
+    // Display a streetview for the selected business
+    this.displayStreetView = function(business) {
+        self.panorama.setPosition(business.location.coordinates());
+        self.panorama.setVisible(true);
+    };
+
+    // Hides the streetview
+    this.hideStreetView = function() {
+        this.panorama.setVisible(false);
+    }
 
     // Setup Initial Location
     this.currentLocation(this.locations()[0]);
