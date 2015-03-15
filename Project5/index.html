@@ -28,6 +28,7 @@
 
         <div class="businessInfoBox infoBox" data-bind="with: selectedBusiness, visible: selectedBusiness">
             <span class="selectedBusinessName" data-bind="text: location.name"></span>
+            <span class="selectedBusinessCategory" data-bind="text: category, visible: category"></span>
             <a class="streetViewLink" data-bind="click: $parent.displayStreetView">Display Street View</a>
         </div>
     </body>

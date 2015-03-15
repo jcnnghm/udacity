@@ -12,6 +12,17 @@ var Location = function(name, latitude, longitude) {
 
 // Represents a business loaded from FourSquare
 var Business = function(fourSquareVenue) {
+    var self = this;
+
+    // The category is the shortName of the primary category in FourSquare's
+    // data
+    self.category = null;
+    fourSquareVenue.categories.forEach(function(category) {
+        if (category.primary) {
+            self.category = category.shortName;
+        }
+    });
+
     // Compose the business using location, so it can be extended when necessary
     this.location = new Location(
         fourSquareVenue.name,

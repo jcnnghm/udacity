@@ -62,6 +62,13 @@ html, body {
     display: block;
 }
 
+.selectedBusinessCategory {
+    margin: 5px 10px 0 10px;
+    font-size: 12px;
+    font-weight: normal;
+    display: block;
+}
+
 .streetViewLink {
     display: block;
     cursor: pointer;
