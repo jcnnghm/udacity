@@ -2,34 +2,42 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Restaurant Map</title>
 
         <!-- build:css output.min.css -->
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" href="css/main.css">
         <!-- endbuild -->
 
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz_Q2Jo2YYRkhs9pX_yZ2dneekx5xTOM4"></script>
         <!-- build:js output.min.js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <script src="bower_components/knockout/dist/knockout.js"></script>
         <script src="js/app.js"></script>
         <!-- endbuild -->
     </head>
     <body>
-        <div class="map"></div>
+        <div class="row">
+            <div class="col-md-10 mapColumn">
+                <div class="map"></div>
 
-        <select class="locationSelect" data-bind="options: locations, optionsText: 'name', value: currentLocation"></select>
+                <input class="searchInput" type="text" data-bind="textInput: searchTerm" placeholder="Search">
 
-        <ul class="locations infoBox" data-bind="foreach: businesses">
-            <li class="location" data-bind="text: location.name, click: $parent.selectBusiness, css: { highlight: $data === $parent.selectedBusiness() }"></li>
-        </ul>
+                <div class="businessInfoBox infoBox" data-bind="with: selectedBusiness, visible: selectedBusiness">
+                    <span class="selectedBusinessName" data-bind="text: location.name"></span>
+                    <span class="selectedBusinessCategory" data-bind="text: category, visible: category"></span>
+                    <a class="streetViewLink" data-bind="click: $parent.displayStreetView">Display Street View</a>
+                </div>
 
-        <input class="searchInput" type="text" data-bind="textInput: searchTerm" placeholder="Search">
-
-        <div class="businessInfoBox infoBox" data-bind="with: selectedBusiness, visible: selectedBusiness">
-            <span class="selectedBusinessName" data-bind="text: location.name"></span>
-            <span class="selectedBusinessCategory" data-bind="text: category, visible: category"></span>
-            <a class="streetViewLink" data-bind="click: $parent.displayStreetView">Display Street View</a>
+                <select class="locationSelect" data-bind="options: locations, optionsText: 'name', value: currentLocation"></select>
+            </div>
+            <div class="col-md-2 locationsColumn">
+                <ul class="locations infoBox" data-bind="foreach: businesses">
+                    <li class="location" data-bind="text: location.name, click: $parent.selectBusiness, css: { highlight: $data === $parent.selectedBusiness() }"></li>
+                </ul>
+            </div>
         </div>
     </body>
 </html>
